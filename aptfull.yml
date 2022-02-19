@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Full system upgrade
+      apt: 
+        update_cache: yes 
+        cache_valid_time: 3600
+        upgrade: full
