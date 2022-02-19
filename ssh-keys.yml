@@ -1,6 +1,6 @@
 - hosts: all
   tasks:
-    - name: copy public keys
+    - name: Install public keys
       authorized_key:
         user: soyun
         state: present
