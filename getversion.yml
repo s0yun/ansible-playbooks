@@ -5,4 +5,4 @@
   tasks:
   - name: Get host name and distro
     
-    debug: msg="{{ansible_hostname}} running {{ ansible_distribution }} > {{ ansible_distribution_version}}"
+    debug: msg=" {{ansible_hostname}} running {{ ansible_distribution }} > {{ ansible_distribution_version}} "
