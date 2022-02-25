@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   tasks:
-    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+    - name: Update apt repo and cache on all boxes
       apt:
         update_cache: yes
         force_apt_get: yes
@@ -10,3 +10,9 @@
     - name: Upgrade all packages after updating the apt cache.
       apt:
         upgrade: yes
+    - name: Remove useless packages from the cache
+      apt:
+        autoclean: yes
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoremove: yes
