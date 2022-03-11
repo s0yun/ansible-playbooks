@@ -1,18 +1,13 @@
 ---
 - hosts: all
   become: true
+  become_user: root
   tasks:
-    - name: Update apt repo and cache on all boxes
-      apt:
-        update_cache: yes
-        force_apt_get: yes
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt: 
+        update_cache: yes 
+        force_apt_get: yes 
         cache_valid_time: 3600
-    - name: Upgrade all packages after updating the apt cache.
-      apt:
+    - name: Upgrade all packages after updating the apt cache. 
+      apt: 
         upgrade: yes
-    - name: Remove useless packages from the cache
-      apt:
-        autoclean: yes
-    - name: Remove dependencies that are no longer required
-      apt:
-        autoremove: yes

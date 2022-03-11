@@ -1,0 +1,5 @@
+- hosts: 10.0.5.11
+  tasks:
+  - name: install starship
+      user: soyun
+      command: sh -c "$(curl -fsSL https://starship.rs/install.sh)"
