@@ -1,0 +1,29 @@
+---
+- hosts: 127.0.0.1
+  tasks:
+    # - name: Check that starship is installed Pt I
+    #   become: yes
+    #   any_errors_fatal: true
+    #   stat:
+    #     path: /usr/local/starship
+    #     register: starship
+    #     failed_when: starship.exists
+    # - name: Check starship is installed Pt II
+    #   debug:
+    #     msg: "Install starship before proceeding"
+    - name: Installing zsh
+      apt:
+        name: zsh
+        state: present
+      become: true
+      when: ansible_os_family == 'Debian'
+    - name: downloading starship configuration
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/s0yun/dotfiles/main/starship.toml
+        dest: /home/soyun/.config/starship.toml
+        force: yes
+    - name: adding starship to .zshrc
+      lineinfile:
+        path: /home/soyun/.zshrc
+        line: 'eval "$(starship init zsh)"'
+        insertbefore: last

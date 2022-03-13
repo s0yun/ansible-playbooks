@@ -3,11 +3,11 @@
   tasks:
     - name: Updating homebrew
       community.general.homebrew:
-       update_homebrew: yes
+        update_homebrew: yes
     - name: Updating all packages
       community.general.homebrew:
-       upgrade_all: yes
-      register: changed_pkg
+        upgrade_all: yes
+        register: changed_pkg
     - name: Verbose output
       debug:
-       msg: "{{ changed_pkg }}"
+        msg: "{{ changed_pkg }}"

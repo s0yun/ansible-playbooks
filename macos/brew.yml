@@ -3,12 +3,12 @@
   tasks:
     - name: Installing all packages
       community.general.homebrew:
-       name: "{{ packages }}"
-       state: latest
+        name: "{{ packages }}"
+      state: latest
       register: changed_pkg
-    - name: Verbose output
+    - name: What packages have been installed 
       debug:
-       msg: "{{ changed_pkg }}"
+      msg: "{{ changed_pkg }}"
   vars:
     packages:
       - bitwarden
@@ -19,3 +19,4 @@
       - ansible-lint
       - spotify
       - packer
+      - git
