@@ -5,7 +5,6 @@ proxy.infra.int.s0yun.xyz
 unifi.int.s0yun.xyz
 vpn.infra.int.s0yun.xyz
 photos.infra.int.s0yun.xyz
-#authentik.int.s0yun.xyz
 
 [docker]
 docker01.infra.int.s0yun.xyz
