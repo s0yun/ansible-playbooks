@@ -1,0 +1,12 @@
+---
+-
+  hosts: all
+  become: true
+  tasks:
+    - name: Install packages commonly used by me
+      ansible.builtin.apt:
+        pkg: "{{ aptpkgs }}"
+        state: present
+  vars:
+    aptpkgs:
+    - sipcalc

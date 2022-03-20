@@ -1,9 +1,0 @@
----
-- hosts: all
-  become: true
-  tasks:
-    - name: Reboot all hosts
-      reboot:
-        reboot_timeout: 3600
-    - name: Heartbeat check
-      ansible.builtin.ping:

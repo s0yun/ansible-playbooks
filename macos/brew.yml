@@ -4,11 +4,11 @@
     - name: Installing all packages
       community.general.homebrew:
         name: "{{ packages }}"
-      state: latest
+        state: latest
       register: changed_pkg
     - name: What packages have been installed 
       debug:
-      msg: "{{ changed_pkg }}"
+        msg: "{{ changed_pkg }}"
   vars:
     packages:
       - bitwarden
@@ -20,3 +20,4 @@
       - spotify
       - packer
       - git
+      - sipcalc

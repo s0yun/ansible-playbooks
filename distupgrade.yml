@@ -12,3 +12,5 @@
         reboot_timeout: 3600
     - name: Heartbeat check
       ansible.builtin.ping:
+    - name: Getting host information
+      debug: msg="{{ ansible_hostname }} running {{ ansible_distribution }} > {{ ansible_distribution_version }}"
