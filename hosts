@@ -4,6 +4,7 @@ proxy.infra.int.s0yun.xyz
 unifi.int.s0yun.xyz
 vpn.infra.int.s0yun.xyz
 photos.infra.int.s0yun.xyz
+oci.s0yun.xyz ansible_user=ubuntu
 
 [docker]
 docker01.infra.int.s0yun.xyz
