@@ -2,6 +2,6 @@
   tasks:
     - name: copy public keys
       authorized_key:
-        user: soyun
+        user: "{{ ansible_user }}"
         state: present
         key: https://github.com/s0yun.keys
