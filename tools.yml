@@ -10,3 +10,4 @@
   vars:
     aptpkgs:
     - sipcalc
+    - whois
