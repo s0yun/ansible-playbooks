@@ -13,6 +13,5 @@ jobs:
       with:
         targets: |
           "./*.yml"
-          "./macos/*.yml"
         override-deps: |
           rich>=9.5.1,<11.0.0
