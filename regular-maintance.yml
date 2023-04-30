@@ -1,30 +1,31 @@
+- name: Regular maintance for apt
 - hosts: all
-  become: yes
+  become: true
   tasks:
     - name: Update apt repo and cache on all Debian/Ubuntu boxes
-      apt:
-        update_cache: yes
-        force_apt_get: yes
+      ansible.builtin.apt:
+        update_cache: true
+        force_apt_get: true
         cache_valid_time: 3600
     - name: Upgrade all packages after updating the apt cache.
-      apt:
-        upgrade: yes
+      ansible.builtin.apt:
+        upgrade: true
       register: debian
     - name: List installed and updated packages I
-      shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
+      ansible.builtin.shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
       register: result
       when: debian.changed
     - name: List installed and updated packages I
-      debug: msg="{{ result.stdout_lines }}"
+      ansible.builtin.debug: msg="{{ result.stdout_lines }}"
       when: debian.changed
     - name: Remove unused dependency packages
-      apt:
-        autoremove : yes
-      register: dependancy-clean
+      ansible.builtin.apt:
+        autoremove: true
+      register: dependancy_clean
     - name: Search DPGK for removed packages I
-      shell: grep -E "^$(date +%Y-%m-%d).+ (remove) " /var/log/dpkg.log |cut -d " " -f 3-5
+      ansible.builtin.shell: grep -E "^$(date +%Y-%m-%d).+ (remove) " /var/log/dpkg.log |cut -d " " -f 3-5
       register: result
-      when: dependancy-clean.changed
+      when: dependancy_clean.changed
     - name: List removed packages II
-      debug: msg="{{ result.stdout_lines }}"
-      when: dependancy-clean.changed
+      ansible.builtin.debug: msg="{{ result.stdout_lines }}"
+      when: dependancy_clean.changed
