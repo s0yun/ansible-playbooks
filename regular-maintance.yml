@@ -17,3 +17,14 @@
     - name: List installed and updated packages I
       debug: msg="{{ result.stdout_lines }}"
       when: debian.changed
+    - name: Remove unused dependency packages
+      apt:
+        autoremove : yes
+      register: dependancy-clean
+    - name: Search DPGK for removed packages I
+      shell: grep -E "^$(date +%Y-%m-%d).+ (remove) " /var/log/dpkg.log |cut -d " " -f 3-5
+      register: result
+      when: dependancy-clean.changed
+    - name: List removed packages II
+      debug: msg="{{ result.stdout_lines }}"
+      when: dependancy-clean.changed
