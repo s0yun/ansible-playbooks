@@ -3,14 +3,14 @@
   tasks:
     - name: Check that starship is installed Pt I
       become: yes
-      stat:
+      ansible.builtin.stat module:
         path: /usr/local/bin/starship
       register: starship
     - name: Check starship is installed Pt II
       debug:
         msg: "Install starship before proceeding"
-      when: not starship.stat.exists
-      failed_when: not starship.stat.exists
+      when: not starship.ansible.builtin.stat module.exists
+      failed_when: not starship.ansible.builtin.stat module.exists
     # - name: Installing zsh
     #   apt:
     #     name: zsh

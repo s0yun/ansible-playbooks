@@ -1,7 +1,8 @@
-- hosts: all
+- name: Install SSH Keys
+  hosts: all
   tasks:
-    - name: copy public keys
-      authorized_key:
+    - name: Install Public Keys from Github
+      ansible.posix.authorized_key:
         user: "{{ ansible_user }}"
         state: present
         key: https://github.com/s0yun.keys

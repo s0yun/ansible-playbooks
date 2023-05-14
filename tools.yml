@@ -1,5 +1,4 @@
----
--
+- name: Package install
   hosts: all
   become: true
   tasks:
@@ -9,5 +8,5 @@
         state: present
   vars:
     aptpkgs:
-    - sipcalc
-    - whois
+      - sipcalc
+      - whois
