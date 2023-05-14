@@ -1,8 +1,9 @@
 - name: Package install
-  hosts: all
-  become: true
+  hosts: localhost
+
   tasks:
-    - name: Install packages commonly used by me
+    - name: Install commonly used tools
+      become: true
       ansible.builtin.apt:
         pkg: "{{ aptpkgs }}"
         state: present

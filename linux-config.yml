@@ -35,3 +35,14 @@
         url: https://raw.githubusercontent.com/s0yun/dotfiles/main/starship.toml
         dest: /home/{{ ansible_user }}/.config/starship.toml
         mode: '0644'
+
+    - name: Install commonly used tools
+      become: true
+      ansible.builtin.apt:
+        pkg: "{{ aptpkgs }}"
+        state: present
+
+  vars:
+    aptpkgs:
+      - sipcalc
+      - whois
