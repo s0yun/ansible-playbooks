@@ -3,5 +3,6 @@
         "deps",
         "insertbefore",
         "lineinfile"
-    ]
+    ],
+    "ansible.python.interpreterPath": "/bin/python3"
 }

@@ -6,6 +6,7 @@
         path: /home/{{ ansible_user }}/.hushlogin
         state: touch
         mode: '0644'
+
     - name: Check if .config directory exists
       ansible.builtin.stat:
         path: "/home/{{ ansible_user }}/.config"

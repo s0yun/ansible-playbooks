@@ -1,0 +1,17 @@
+- name: Get fleet information
+  hosts: all
+  tasks:
+    - name: Getting host information
+      ansible.builtin.debug: msg="{{ ansible_hostname }} running {{ ansible_distribution }} > {{ ansible_distribution_version }}"
+
+    - name: Check if starship initialization is present in ~/.bashrc
+      ansible.builtin.shell: |
+        set -o pipefail
+        cat ~/.bashrc | grep -qF 'eval "$(starship init bash)"'
+      register: starship_check
+      changed_when: false
+      failed_when: false
+
+    - name: Starship in bash detection
+      ansible.builtin.debug: msg= "starship in bash detected"
+      when: not starship_check.rc

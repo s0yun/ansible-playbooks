@@ -1,0 +1,19 @@
+- name: Test run
+  hosts: localhost
+  tasks:
+    - name: Check if starship initialization is present in ~/.bashrc
+      ansible.builtin.shell: |
+        set -o pipefail
+        cat ~/.bashrc | grep -qF 'eval "$(starship init bash)"'
+      register: starship_check
+      changed_when: false
+      failed_when: false
+
+
+    - name: Append .bashrc with command to run starship.rs
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        block: 'eval "$(starship init bash)"'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+        insertafter: EOF
+      when: not starship_check.rc

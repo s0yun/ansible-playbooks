@@ -8,22 +8,9 @@
         upgrade: true
       register: apt_upgrade
 
-    # - name: List installed and updated packages I # noqa no-changed-when
-    #   ansible.builtin.shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
-    #   register: result
-    #   when: debian.changed
-
-    - name: List installed and updated packages I # noqa no-handler
-      ansible.builtin.debug:
-        msg: >-
-          {% for line in apt_upgrade.stdout_lines %}
-          {% if line.startswith('Unpacking') %}
-          {{ line | regex_replace('^Unpacking\s(.*?)(:.*?)?\s\((.*?)\)\sover\s\((.*?)\).*$', '\1') }}
-          {{ line | regex_replace('^Unpacking\s(.*?)(:.*?)?\s\((.*?)\)\sover\s\((.*?)\).*$', '\4') }} ->
-          {{ line | regex_replace('^Unpacking\s(.*?)(:.*?)?\s\((.*?)\)\sover\s\((.*?)\).*$', '\3') }}
-
-          {% endif %}
-          {% endfor %}
+    - name: List installed and updated packages I # noqa no-changed-when
+      ansible.builtin.shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
+      register: result
       when: apt_upgrade.changed
 
     - name: Remove unused dependency packages
