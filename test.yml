@@ -1,5 +1,5 @@
-- name: Test run
-  hosts: localhost
+- name: Starship c
+  hosts: all
   tasks:
     - name: Check if starship initialization is present in ~/.bashrc
       ansible.builtin.shell: |

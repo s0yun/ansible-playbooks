@@ -1,8 +1,16 @@
-- name: Get fleet information
+- name: Get information
   hosts: all
   tasks:
     - name: Getting host information
       ansible.builtin.debug: msg="{{ ansible_hostname }} running {{ ansible_distribution }} > {{ ansible_distribution_version }}"
+
+    - name: Check Shell
+      ansible.builtin.shell: echo $SHELL
+      register: shell_output
+
+    - name: Print Shell Information
+      ansible.builtin.debug:
+        msg: "The current shell is {{ shell_output.stdout }}"
 
 ## Broken to all heck
 

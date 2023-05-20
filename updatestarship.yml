@@ -1,0 +1,26 @@
+- name: Update starship.rs shell
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Ensure curl is installed
+      ansible.builtin.package:
+        name: curl
+        state: present
+
+    - name: Download starship.rs update script
+      ansible.builtin.get_url:
+        url: https://starship.rs/install.sh
+        dest: /tmp/starship_update.sh
+        mode: '0755'
+
+    - name: Run starship.rs update script
+      ansible.builtin.shell: /tmp/starship_update.sh -y
+      args:
+        executable: /bin/bash
+      register: starship_update_result
+      changed_when: starship_update_result.stdout_lines | length > 0
+
+    - name: Print update status
+      ansible.builtin.debug:
+        msg: "Starship.rs update: {{ 'succeeded' if starship_update_result.stdout_lines | length > 0 else 'skipped' }}"
