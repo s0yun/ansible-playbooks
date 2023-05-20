@@ -24,3 +24,12 @@
     - name: Print update status
       ansible.builtin.debug:
         msg: "Starship.rs update: {{ 'succeeded' if starship_update_result.stdout_lines | length > 0 else 'skipped' }}"
+
+    - name: Verify Starship installation
+      ansible.builtin.shell:
+        cmd: starship --version
+      register: starship_output
+
+    - name: Print Starship version
+      ansible.builtin.debug:
+        msg: "Starship version: {{ starship_output.stdout }}"

@@ -1,13 +1,15 @@
-- hosts: all
+- name: Common settings
+  hosts: all
+  # connection: local
   become: true
   tasks:
-  - name: enable password-less sudo
-    lineinfile:
-      path: /etc/sudoers
-      state: present
-      regexp: '^%sudo'
-      line: '%sudo ALL=(ALL) NOPASSWD: ALL'
-      validate: 'visudo -cf %s'
+    - name: Enable password-less sudo
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%sudo'
+        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
 # - name: fix console-setup service on ubuntu 20.04
 #   file:
 #     state: link

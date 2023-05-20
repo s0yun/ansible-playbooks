@@ -1,4 +1,4 @@
-- name: Regular maintance for apt
+- name: Regular maintance
   hosts: all
   become: true
   tasks:
@@ -11,6 +11,11 @@
     - name: List installed and updated packages I # noqa no-changed-when
       ansible.builtin.shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
       register: result
+      when: apt_upgrade.changed
+
+    - name: List upgraded packages II # noqa no-changed-when
+      ansible.builtin.debug:
+        msg: "{{ result.stdout_lines }}"
       when: apt_upgrade.changed
 
     - name: Remove unused dependency packages
