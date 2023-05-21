@@ -21,10 +21,6 @@
       register: starship_update_result
       changed_when: starship_update_result.stdout_lines | length > 0
 
-    - name: Print update status
-      ansible.builtin.debug:
-        msg: "Starship.rs update: {{ 'succeeded' if starship_update_result.stdout_lines | length > 0 else 'skipped' }}"
-
     - name: Verify Starship installation
       ansible.builtin.shell:
         cmd: starship --version
