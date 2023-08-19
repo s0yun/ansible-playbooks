@@ -1,7 +1,7 @@
 - name: Install SSH Keys
   hosts: all
   tasks:
-    - name: Install Public Keys from Github
+    - name: Install Keys from Github
       ansible.posix.authorized_key:
         user: "{{ ansible_user }}"
         state: present

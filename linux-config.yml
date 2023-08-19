@@ -28,21 +28,21 @@
       ansible.builtin.debug:
         msg: "Starship version: {{ starship_output.stdout }}"
 
-    - name: Check if starship initialization is present in ~/.bashrc
-      ansible.builtin.shell: |
-        set -o pipefail
-        cat ~/.bashrc | grep -qF 'eval "$(starship init bash)"'
-      register: starship_check
-      changed_when: false
-      failed_when: false
+    # - name: Check if starship initialization is present in ~/.bashrc
+    #   ansible.builtin.shell: |
+    #     set -o pipefail
+    #     cat ~/.bashrc | grep -qF 'eval "$(starship init bash)"'
+    #   register: starship_check
+    #   changed_when: false
+    #   failed_when: false
 
-    - name: Append .bashrc with command to run starship.rs
-      ansible.builtin.blockinfile:
-        path: ~/.bashrc
-        block: 'eval "$(starship init bash)"'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
-        insertafter: EOF
-      when: not starship_check.rc
+    # - name: Append .bashrc with command to run starship.rs
+    #   ansible.builtin.blockinfile:
+    #     path: ~/.bashrc
+    #     block: 'eval "$(starship init bash)"'
+    #     marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+    #     insertafter: EOF
+    #   when: not starship_check.rc
 
     - name: Check if .config directory exists
       ansible.builtin.stat:
@@ -74,13 +74,13 @@
         dest: /home/{{ ansible_user }}/.config/starship.toml
         mode: '0644'
 
-    - name: Install commonly used tools
-      become: true
-      ansible.builtin.apt:
-        pkg: "{{ aptpkgs }}"
-        state: present
+  #   - name: Install commonly used tools
+  #     become: true
+  #     ansible.builtin.apt:
+  #       pkg: "{{ aptpkgs }}"
+  #       state: present
 
-  vars:
-    aptpkgs:
-      - sipcalc
-      - whois
+  # vars:
+  #   aptpkgs:
+  #     - sipcalc
+  #     - whois

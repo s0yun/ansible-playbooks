@@ -1,0 +1,56 @@
+- name: SSH Hardending
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Ensure all needed keys are present
+      ansible.posix.authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: https://github.com/s0yun.keys
+
+    - name: Get SSH Config
+      ansible.builtin.slurp:
+        src: /etc/ssh/sshd_config
+      register: ssh_config
+
+    - name: Check status of SSH Password Authentication
+      ansible.builtin.debug:
+        msg: "PasswordAuthentication is {{ 'enabled' if ('PasswordAuthentication yes' in ssh_config.content | b64decode | string) else 'disabled' }}"
+      register: password_auth_status
+
+    - name: Ensure SSH Key Authentication is Enabled
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PubkeyAuthentication'
+        line: 'PubkeyAuthentication yes'
+      when: "'PasswordAuthentication yes' in ssh_config.content | b64decode | string"
+      become: true
+
+    - name: Disable Password Authentication in SSH Config
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+      notify: restart sshd
+      when: "'PasswordAuthentication yes' in ssh_config.content | b64decode | string"
+      become: true
+
+    - name: Debug SSH Config
+      ansible.builtin.debug:
+        var: ssh_config.content | b64decode | string
+
+    - name: Disable Root Login
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+      become: true
+      when: "'PermitRootLogin no' not in ssh_config.content | b64decode | string"
+
+  handlers:
+    - name: Restart SSH
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+      become: true
