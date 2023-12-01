@@ -8,41 +8,12 @@
         state: touch
         mode: '0644'
 
-    - name: Check if Starship is installed
-      ansible.builtin.shell:
-        cmd: starship --version
-      register: starship_output
-      failed_when: false
-
-    - name: Install Starship using FQCN
-      ansible.builtin.command:
-        cmd: ansible-galaxy collection install community.general.starship
-      when: starship_output.rc != 0
-
-    - name: Verify Starship installation
-      ansible.builtin.shell:
-        cmd: starship --version
-      register: starship_output
-
-    - name: Print Starship version
-      ansible.builtin.debug:
-        msg: "Starship version: {{ starship_output.stdout }}"
-
-    # - name: Check if starship initialization is present in ~/.bashrc
-    #   ansible.builtin.shell: |
-    #     set -o pipefail
-    #     cat ~/.bashrc | grep -qF 'eval "$(starship init bash)"'
-    #   register: starship_check
-    #   changed_when: false
-    #   failed_when: false
-
-    # - name: Append .bashrc with command to run starship.rs
-    #   ansible.builtin.blockinfile:
-    #     path: ~/.bashrc
-    #     block: 'eval "$(starship init bash)"'
-    #     marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
-    #     insertafter: EOF
-    #   when: not starship_check.rc
+    - name: Append .bashrc with command to run starship.rs
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        block: 'eval "$(starship init bash)"'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+        insertafter: EOF
 
     - name: Check if .config directory exists
       ansible.builtin.stat:
@@ -56,17 +27,17 @@
         mode: '0644'
       when: not dir_check.stat.exists
 
-    - name: Check if starship.toml file exists
-      ansible.builtin.stat:
-        path: "/home/{{ ansible_user }}/.config/starship.toml"
-      register: file_check
+    # - name: Check if starship.toml file exists
+    #   ansible.builtin.stat:
+    #     path: "/home/{{ ansible_user }}/.config/starship.toml"
+    #   register: file_check
 
     - name: Create starship.toml file if it doesn't exist
       ansible.builtin.copy:
         dest: "/home/{{ ansible_user }}/.config/starship.toml"
         content: ""
         mode: '0644'
-      when: not file_check.stat.exists
+      # when: not file_check.stat.exists
 
     - name: Download starship config
       ansible.builtin.get_url:
@@ -74,13 +45,13 @@
         dest: /home/{{ ansible_user }}/.config/starship.toml
         mode: '0644'
 
-  #   - name: Install commonly used tools
-  #     become: true
-  #     ansible.builtin.apt:
-  #       pkg: "{{ aptpkgs }}"
-  #       state: present
+    - name: Install commonly used tools
+      become: true
+      ansible.builtin.apt:
+        pkg: "{{ aptpkgs }}"
+        state: present
 
-  # vars:
-  #   aptpkgs:
-  #     - sipcalc
-  #     - whois
+  vars:
+    aptpkgs:
+      - sipcalc
+      - whois

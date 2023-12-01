@@ -22,18 +22,16 @@
     - name: Ensure SSH Key Authentication is Enabled
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: '^#?PubkeyAuthentication'
+        regexp: '^(#)?\s*PubkeyAuthentication'
         line: 'PubkeyAuthentication yes'
-      when: "'PasswordAuthentication yes' in ssh_config.content | b64decode | string"
       become: true
 
     - name: Disable Password Authentication in SSH Config
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: '^#?PasswordAuthentication'
+        regexp: '^(#)?\s*PasswordAuthentication'
         line: 'PasswordAuthentication no'
       notify: restart sshd
-      when: "'PasswordAuthentication yes' in ssh_config.content | b64decode | string"
       become: true
 
     - name: Debug SSH Config
@@ -43,7 +41,7 @@
     - name: Disable Root Login
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: '^#?PermitRootLogin'
+        regexp: '^(#)?\s*PermitRootLogin'
         line: 'PermitRootLogin no'
       become: true
       when: "'PermitRootLogin no' not in ssh_config.content | b64decode | string"
