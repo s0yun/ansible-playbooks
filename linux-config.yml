@@ -6,7 +6,7 @@
       ansible.builtin.file:
         path: /home/{{ ansible_user }}/.hushlogin
         state: touch
-        mode: '0644'
+        mode: '770'
 
     - name: Append .bashrc with command to run starship.rs
       ansible.builtin.blockinfile:
@@ -24,7 +24,7 @@
       ansible.builtin.file:
         path: "/home/{{ ansible_user }}/.config"
         state: directory
-        mode: '0644'
+        mode: '770'
       when: not dir_check.stat.exists
 
     # - name: Check if starship.toml file exists
@@ -36,14 +36,14 @@
       ansible.builtin.copy:
         dest: "/home/{{ ansible_user }}/.config/starship.toml"
         content: ""
-        mode: '0644'
+        mode: '770'
       # when: not file_check.stat.exists
 
     - name: Download starship config
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/s0yun/dotfiles/main/starship.toml
         dest: /home/{{ ansible_user }}/.config/starship.toml
-        mode: '0644'
+        mode: '770'
 
     - name: Install commonly used tools
       become: true
