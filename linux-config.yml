@@ -22,15 +22,9 @@
         mode: '0770'
 
     - name: Download starship config
-      ansible.builtin.uri:
+      ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/s0yun/dotfiles/main/starship.toml
-        return_content: true
-      register: starship_config
-
-    - name: Install starship config
-      ansible.builtin.copy:
         dest: "~/.config/starship.toml"
-        content: "{{ starship_config.content }}"
         mode: '0660'
 
     - name: Enable password-less sudo
