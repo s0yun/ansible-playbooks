@@ -2,19 +2,19 @@
   become: true
   tasks:
     - name: Full system upgrade
-      community.general.apt:
+      ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 3600
         upgrade: full
 
     - name: Reboot all hosts
-      community.general.reboot:
+      ansible.builtin.reboot:
         reboot_timeout: 3600
       async: 0
       poll: 0
-      ignore_errors: yes
-      become: yes
-      notify: Reboot check
+      ignore_errors: true
+      become: true
+      notify: Reboot_check
 
     - name: Heartbeat check
       ansible.builtin.ping:
@@ -24,7 +24,7 @@
         msg: "{{ ansible_hostname }} running {{ ansible_distribution }} > {{ ansible_distribution_version }}"
 
   handlers:
-    - name: Reboot check
+    - name: Reboot_check
       ansible.builtin.wait_for_connection:
         timeout: 300
         delay: 10
