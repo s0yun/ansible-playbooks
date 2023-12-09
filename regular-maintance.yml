@@ -14,11 +14,13 @@
         grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
       register: result
       when: apt_upgrade.changed # noqa: no-handler
+      failed_when: apt_upgrade.rc not in [0, 1]  # Allow exit codes 0 (matches found) and 1 (no matches)
 
     - name: List upgraded packages II # noqa no-changed-when
       ansible.builtin.debug:
         msg: "{{ result.stdout_lines }}"
       when: apt_upgrade.changed # noqa: no-handler
+      failed_when: apt_upgrade.rc not in [0, 1]  # Allow exit codes 0 (matches found) and 1 (no matches)
 
     - name: Remove unused dependency packages
       ansible.builtin.apt:
@@ -39,7 +41,7 @@
 
     - name: Getting host information
       ansible.builtin.debug:
-        msg "{{ ansible_hostname }} running {{ ansible_distribution }} > {{ ansible_distribution_version }}"
+        msg: "{{ ansible_hostname }} running {{ ansible_distribution }} > {{ ansible_distribution_version }}"
 
     - name: Check Shell # noqa no-changed-when
       ansible.builtin.shell:
