@@ -1,5 +1,5 @@
-- hosts: all
-  name: OS Level upgrade and reboot
+- name: OS Level upgrade and reboot
+  hosts: all
   become: true
   tasks:
     - name: Full system upgrade
@@ -8,12 +8,12 @@
         cache_valid_time: 3600
         upgrade: full
 
-    - name: Reboot all hosts
+    - name: Reboot all hosts #
       ansible.builtin.reboot:
         reboot_timeout: 3600
       async: 0
       poll: 0
-      ignore_errors: true
+      failed_when: false
       become: true
       notify: Reboot_check
 
