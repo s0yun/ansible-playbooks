@@ -1,0 +1,12 @@
+- name: Clean up
+  hosts: all
+  tasks:
+    - name: Quick install packages
+      become: true
+      ansible.builtin.apt:
+        pkg: "{{ aptpkgs }}"
+        state: present
+
+  vars:
+    aptpkgs:
+      -

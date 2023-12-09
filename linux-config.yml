@@ -1,49 +1,45 @@
 - name: Default User config
   hosts: all
-  #connection: local
+#  connection: local
   tasks:
-    - name: Touch .hushlogin file
-      ansible.builtin.file:
-        path: /home/{{ ansible_user }}/.hushlogin
-        state: touch
-        mode: '660'
+    - name: Hush login notifications
+      ansible.builtin.copy:
+        dest: "~/.hushlogin"
+        content: ""
+        mode: '0660'
 
     - name: Append .bashrc with command to run starship.rs
       ansible.builtin.blockinfile:
-        path: ~/.bashrc
+        path: "~/.bashrc"
         block: 'eval "$(starship init bash)"'
         marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
         insertafter: EOF
 
-    - name: Check if .config directory exists
-      ansible.builtin.stat:
-        path: "/home/{{ ansible_user }}/.config"
-      register: dir_check
-
     - name: Create .config directory if it doesn't exist
       ansible.builtin.file:
-        path: "/home/{{ ansible_user }}/.config"
+        path: "~/.config"
         state: directory
-        mode: '770'
-      when: not dir_check.stat.exists
-
-    # - name: Check if starship.toml file exists
-    #   ansible.builtin.stat:
-    #     path: "/home/{{ ansible_user }}/.config/starship.toml"
-    #   register: file_check
-
-    - name: Create starship.toml file if it doesn't exist
-      ansible.builtin.copy:
-        dest: "/home/{{ ansible_user }}/.config/starship.toml"
-        content: ""
-        mode: '660'
-      # when: not file_check.stat.exists
+        mode: '0770'
 
     - name: Download starship config
-      ansible.builtin.get_url:
+      ansible.builtin.uri:
         url: https://raw.githubusercontent.com/s0yun/dotfiles/main/starship.toml
-        dest: /home/{{ ansible_user }}/.config/starship.toml
-        mode: '660'
+        return_content: true
+      register: starship_config
+
+    - name: Install starship config
+      ansible.builtin.copy:
+        dest: "~/.config/starship.toml"
+        content: "{{ starship_config.content }}"
+        mode: '0660'
+
+    - name: Enable password-less sudo
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%sudo'
+        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
 
     - name: Install commonly used tools
       become: true
@@ -55,3 +51,5 @@
     aptpkgs:
       - sipcalc
       - whois
+      - cifs-utils
+      - zip

@@ -9,21 +9,12 @@
         state: present
         key: https://github.com/s0yun.keys
 
-    - name: Get SSH Config
-      ansible.builtin.slurp:
-        src: /etc/ssh/sshd_config
-      register: ssh_config
-
-    - name: Check status of SSH Password Authentication
-      ansible.builtin.debug:
-        msg: "PasswordAuthentication is {{ 'enabled' if ('PasswordAuthentication yes' in ssh_config.content | b64decode | string) else 'disabled' }}"
-      register: password_auth_status
-
     - name: Ensure SSH Key Authentication is Enabled
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^(#)?\s*PubkeyAuthentication'
         line: 'PubkeyAuthentication yes'
+      notify: restart sshd
       become: true
 
     - name: Disable Password Authentication in SSH Config
@@ -34,17 +25,13 @@
       notify: restart sshd
       become: true
 
-    - name: Debug SSH Config
-      ansible.builtin.debug:
-        var: ssh_config.content | b64decode | string
-
     - name: Disable Root Login
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^(#)?\s*PermitRootLogin'
         line: 'PermitRootLogin no'
+      notify: restart sshd
       become: true
-      when: "'PermitRootLogin no' not in ssh_config.content | b64decode | string"
 
   handlers:
     - name: Restart SSH

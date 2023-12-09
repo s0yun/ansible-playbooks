@@ -1,17 +1,11 @@
----
-name: Ansible Lint 
-on: [push, pull_request]
+# .github/workflows/ansible-lint.yml
+name: ansible-lint
+on: [push]
 jobs:
-  ansible:
-    runs-on: ubuntu-20.04
+  build:
+    name: Ansible Lint # Naming the build is important to use it as a status check
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 1
-    - name: Lint Ansible Playbooks
-      uses: ansible/ansible-lint-action@main
-      with:
-        targets: |
-          "./*.yml"
-        override-deps: |
-          rich>=9.5.1,<11.0.0
+      - uses: actions/checkout@v4
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main # or version tag instead of 'main'

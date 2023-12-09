@@ -1,0 +1,12 @@
+- name: Clean up
+  hosts: all
+  tasks:
+    - name: Remove unneeded packages
+      become: true
+      ansible.builtin.apt:
+        pkg: "{{ aptpkgs }}"
+        state: absent
+
+  vars:
+    aptpkgs:
+      -
