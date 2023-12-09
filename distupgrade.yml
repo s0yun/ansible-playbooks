@@ -1,9 +1,10 @@
 - hosts: all
+  name: OS Level upgrade and reboot
   become: true
   tasks:
     - name: Full system upgrade
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         cache_valid_time: 3600
         upgrade: full
 
