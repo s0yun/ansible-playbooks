@@ -1,4 +1,4 @@
-- name: SSH Hardending
+- name: SSH Hardening
   hosts: all
   gather_facts: true
 
@@ -14,7 +14,7 @@
         path: /etc/ssh/sshd_config
         regexp: '^(#)?\s*PubkeyAuthentication'
         line: 'PubkeyAuthentication yes'
-      notify: restart sshd
+      notify: Restart SSH
       become: true
 
     - name: Disable Password Authentication in SSH Config
@@ -22,7 +22,7 @@
         path: /etc/ssh/sshd_config
         regexp: '^(#)?\s*PasswordAuthentication'
         line: 'PasswordAuthentication no'
-      notify: restart sshd
+      notify: Restart SSH
       become: true
 
     - name: Disable Root Login
@@ -30,7 +30,7 @@
         path: /etc/ssh/sshd_config
         regexp: '^(#)?\s*PermitRootLogin'
         line: 'PermitRootLogin no'
-      notify: restart sshd
+      notify: Restart SSH
       become: true
 
   handlers:

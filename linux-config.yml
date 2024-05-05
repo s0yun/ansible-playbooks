@@ -28,6 +28,7 @@
         mode: '0660'
 
     - name: Enable password-less sudo
+      become: true
       ansible.builtin.lineinfile:
         path: /etc/sudoers
         state: present
